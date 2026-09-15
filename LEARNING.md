@@ -53,3 +53,12 @@
 - Created study material vector RAG pipeline in `backend/rag.py` using character text chunking and vector embedding search.
 - Added hybrid keyword-density boosting to vector similarity scores to ensure precision retrieval on domain-specific study terms (e.g. *glycolysis*, *photosynthesis*, *chloroplasts*).
 - Validated text chunking and query accuracy with automated test suite `tests/test_rag.py`.
+
+---
+
+## Day 5: Ground Puzzles in Real Content (Sep 20, 2026)
+
+### Key Learnings & Notes (Day 5):
+- Wired RAG retrieval into `backend/grounded_generator.py` so generated puzzles derive directly from retrieved study material text chunks rather than generic knowledge.
+- Implemented an automated reflection guardrail (`validate_puzzle_answerability`) that verifies whether generated solutions and clues exist within source study text.
+- Re-used reflection-loop pattern to reject unanswerable puzzles prior to serving them to players in a room session.
