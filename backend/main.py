@@ -166,6 +166,24 @@ def join_room(req: JoinRoomRequest):
         "is_host": False
     }
 
+@app.get("/api/rooms/{room_code}/summary")
+def get_room_summary(room_code: str):
+    from backend.summary_analyzer import SessionSummaryAnalyzer
+    room_code = room_code.upper()
+    if room_code not in rooms:
+        raise HTTPException(status_code=404, detail="Room not found")
+    
+    room = rooms[room_code]
+    analyzer = SessionSummaryAnalyzer()
+    
+    puzzles_data = [p.dict() for p in room.puzzles]
+    report = analyzer.generate_summary_report(
+        room_code=room.room_code,
+        topic=room.topic,
+        puzzles=puzzles_data
+    )
+    return report.dict()
+
 @app.post("/api/rooms/submit-answer")
 async def submit_answer(req: SubmitAnswerRequest):
     import time

@@ -96,3 +96,16 @@
 - Designed progressive, non-spoiler subtle hint synthesis (`HintTriggerResult`) that provides conceptual guidance rather than giving away solutions.
 - Integrated stuck signal checks into live WebSocket broadcasts and answer submission handlers in `backend/main.py`.
 - Automated test coverage provided by `tests/test_hints.py`.
+
+---
+
+## Day 9: End-of-Session Summary (Sep 24, 2026)
+
+### Key Learnings & Notes (Day 9):
+- Created post-escape room analytics engine `SessionSummaryAnalyzer` in `backend/summary_analyzer.py`.
+- Formulated concept struggle metric calculation (`struggle_score = failed_attempts * 2.5 + solve_time / 20.0`), mapping score ranges to `LOW`, `MODERATE`, and `HIGH` struggle severity categories with targeted learning recommendations.
+- Added `GET /api/rooms/{room_code}/summary` endpoint to retrieve post-game learning reports.
+- Automated testing added via `tests/test_summary.py`.
+
+### Why this makes the project useful after the fun ends:
+> While escape room mechanics provide high engagement during gameplay, **The Puzzle Room Agent** converts gameplay telemetry into a diagnostic post-session learning summary. Students and study groups leave with an explicit breakdown of which concepts tripped them up and targeted review recommendations before exams.
