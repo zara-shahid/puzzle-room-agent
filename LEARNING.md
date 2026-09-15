@@ -31,3 +31,16 @@
    - **Fix:** Wrapped WebSocket loop in `try...except WebSocketDisconnect` block that automatically triggers `leave_room` cleanup and broadcasts the updated room state to remaining participants.
 3. **Broken:** Client lost session state on browser refresh.
    - **Fix:** Persisted `userId`, `username`, and `roomCode` in browser `sessionStorage` so refreshing re-establishes the WebSocket session cleanly.
+
+---
+
+## Day 3: Structured Puzzle Schema & Generator (Sep 18, 2026)
+
+### Key Learnings & Notes (Day 3):
+- Designed comprehensive Pydantic models for four distinct puzzle categories in `backend/schemas.py`:
+  - `RiddlePuzzle`
+  - `CodeLockPuzzle`
+  - `LogicGridPuzzle`
+  - `HiddenCluePuzzle`
+- Built single-agent structured puzzle chain generator in `backend/generator.py`.
+- Automated schema validation and quality verification using `tests/test_generator.py` on the sample study topic *"Quantum Computing"*.
