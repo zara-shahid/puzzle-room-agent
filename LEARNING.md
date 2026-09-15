@@ -84,3 +84,15 @@
   - `Otherwise` -> Maintain optimal flow state difficulty at `MEDIUM`.
 - Integrated reflection loop into `submit_answer` in `backend/main.py`, logging critique history directly into `room.reflection_log` for demo transparency.
 - Tested and verified with `tests/test_reflection_agent.py`.
+
+---
+
+## Day 8: Adaptive Hints, Not Answers (Sep 23, 2026)
+
+### Key Learnings & Notes (Day 8):
+- Extended `ReflectionLoopAgent` in `backend/reflection_agent.py` to detect group **Stuck Signals**:
+  - **Signal 1:** `failed_attempts >= 2` consecutive incorrect submissions.
+  - **Signal 2:** `elapsed_seconds >= 45.0s` without puzzle unlock.
+- Designed progressive, non-spoiler subtle hint synthesis (`HintTriggerResult`) that provides conceptual guidance rather than giving away solutions.
+- Integrated stuck signal checks into live WebSocket broadcasts and answer submission handlers in `backend/main.py`.
+- Automated test coverage provided by `tests/test_hints.py`.

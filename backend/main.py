@@ -215,13 +215,28 @@ async def submit_answer(req: SubmitAnswerRequest):
         return {"status": "correct", "message": "Puzzle unlocked!", "critique": critique.dict()}
     else:
         target_puzzle.failed_attempts += 1
+        
+        # Check Day 8 Stuck Signal on wrong attempt
+        import time
+        elapsed = time.time() - (target_puzzle.start_time or time.time())
+        stuck_check = reflection_agent.check_stuck_signal(
+            failed_attempts=target_puzzle.failed_attempts,
+            elapsed_seconds=elapsed,
+            base_hint=target_puzzle.hint
+        )
+
         await room_manager.broadcast_to_room(room_code, {
             "type": "FAILED_ATTEMPT",
             "puzzle_id": req.puzzle_id,
             "submitted_by": user.username,
-            "failed_attempts": target_puzzle.failed_attempts
+            "failed_attempts": target_puzzle.failed_attempts,
+            "stuck_signal": stuck_check.dict() if stuck_check.is_stuck else None
         })
-        return {"status": "incorrect", "message": "Incorrect answer. Try again!"}
+        return {
+            "status": "incorrect",
+            "message": "Incorrect answer. Try again!",
+            "stuck_signal": stuck_check.dict() if stuck_check.is_stuck else None
+        }
 
 # --- Real-Time WebSocket Synchronization Endpoint ---
 @app.websocket("/ws/room/{room_code}/{user_id}")

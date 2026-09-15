@@ -1,5 +1,5 @@
 import time
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 from pydantic import BaseModel
 from backend.schemas import DifficultyLevel
 
@@ -17,15 +17,61 @@ class DifficultyCritique(BaseModel):
     time_to_solve: float
     failed_attempts: int
 
+class HintTriggerResult(BaseModel):
+    is_stuck: bool
+    stuck_signal_reason: Optional[str] = None
+    subtle_hint: Optional[str] = None
+
 class ReflectionLoopAgent:
     """
-    Day 7 Core Innovation Feature: Explainable Reflection Loop.
-    Watches group performance metrics (time-to-solve, failed attempts) and evaluates whether
-    the next puzzle in the escape room chain should be easier, remain the same, or become harder.
+    Day 7 & Day 8 Core Innovation Feature: Explainable Reflection Loop.
+    1. Watches group performance metrics and critiques adaptive difficulty.
+    2. Detects 'Stuck' signals (Failed attempts >= 2 OR Elapsed time > 45s) and issues progressive, subtle hints without spoiling answers.
     """
-    def __init__(self, target_solve_time_sec: float = 60.0, max_allowed_failures: int = 3):
+    def __init__(self, target_solve_time_sec: float = 45.0, max_allowed_failures: int = 2):
         self.target_solve_time_sec = target_solve_time_sec
         self.max_allowed_failures = max_allowed_failures
+
+    def check_stuck_signal(
+        self,
+        failed_attempts: int,
+        elapsed_seconds: float,
+        base_hint: str,
+        hint_level: int = 0
+    ) -> HintTriggerResult:
+        """
+        Day 8 Stuck Signal Criteria:
+        - Signal 1: Repeated incorrect submissions (failed_attempts >= 2)
+        - Signal 2: Time stall threshold (elapsed_seconds >= target_solve_time_sec)
+
+        Generates a non-spoiler, progressive subtle hint.
+        """
+        is_stuck = False
+        reason = None
+
+        if failed_attempts >= self.max_allowed_failures:
+            is_stuck = True
+            reason = f"Stuck Signal Detected: {failed_attempts} consecutive incorrect attempts."
+        elif elapsed_seconds >= self.target_solve_time_sec:
+            is_stuck = True
+            reason = f"Stuck Signal Detected: Group idle/stalled for {elapsed_seconds:.1f}s without unlocking."
+
+        if not is_stuck:
+            return HintTriggerResult(is_stuck=False)
+
+        # Progressive, non-spoiler hint synthesis based on base hint
+        if hint_level == 0:
+            subtle = f"[HINT NUDGE] Reflection Agent Nudge: {base_hint}"
+        elif hint_level == 1:
+            subtle = f"[HINT NUDGE] Deeper Guidance: Pay special attention to exact terms in your ingested study notes."
+        else:
+            subtle = f"[HINT NUDGE] Focused Hint: Break down the problem statement step-by-step. Think about key definitions."
+
+        return HintTriggerResult(
+            is_stuck=True,
+            stuck_signal_reason=reason,
+            subtle_hint=subtle
+        )
 
     def critique_group_performance(
         self,
@@ -35,13 +81,8 @@ class ReflectionLoopAgent:
     ) -> DifficultyCritique:
         """
         Deterministic, explainable rule engine that critiques group performance.
-        Defendable logic for demo:
-        - If failed_attempts >= 3 OR solve_time > 90s => Group is struggling -> Decrease Difficulty
-        - If failed_attempts == 0 AND solve_time < 30s => Group is speeding through -> Increase Difficulty
-        - Otherwise => Group is in optimal flow state -> Maintain Difficulty
         """
         if failed_attempts >= self.max_allowed_failures or solve_time_seconds > (self.target_solve_time_sec * 1.5):
-            # Downgrade difficulty
             new_diff = DifficultyLevel.EASY if current_difficulty == DifficultyLevel.MEDIUM else (
                 DifficultyLevel.MEDIUM if current_difficulty == DifficultyLevel.HARD else DifficultyLevel.EASY
             )
@@ -50,7 +91,6 @@ class ReflectionLoopAgent:
                 f"(exceeding target {self.target_solve_time_sec}s). Lowering difficulty to {new_diff.value.upper()}."
             )
         elif failed_attempts == 0 and solve_time_seconds < (self.target_solve_time_sec * 0.5):
-            # Upgrade difficulty
             new_diff = DifficultyLevel.HARD if current_difficulty == DifficultyLevel.MEDIUM else (
                 DifficultyLevel.MEDIUM if current_difficulty == DifficultyLevel.EASY else DifficultyLevel.HARD
             )
