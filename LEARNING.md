@@ -71,3 +71,16 @@
 - Added `POST /api/rooms/submit-answer` endpoint in `backend/main.py` to evaluate puzzle solutions and update room puzzle chain progress.
 - Implemented WebSocket `PUZZLE_SOLVED` and `FAILED_ATTEMPT` broadcasts across all clients connected to a room.
 - Built **Optimistic UI Updates** in `frontend/src/App.tsx`: when a player clicks "Unlock Passcode", the puzzle instantly updates to solved state on the client before server response, and automatically reconciles/reverts if rejected.
+
+---
+
+## Day 7: Reflection Loop: Adaptive Difficulty (Sep 22, 2026)
+
+### Key Learnings & Notes (Day 7):
+- Implemented `ReflectionLoopAgent` in `backend/reflection_agent.py` to evaluate group performance (solve speed in seconds, failed attempt count).
+- Formulated an **explainable rule critique engine**:
+  - `High Failed Attempts (>=2) OR Solve Time > 67.5s` -> Lower difficulty to `EASY` with explicit reasoning.
+  - `0 Failed Attempts AND Solve Time < 22.5s` -> Elevate difficulty to `HARD` with clean mastery log.
+  - `Otherwise` -> Maintain optimal flow state difficulty at `MEDIUM`.
+- Integrated reflection loop into `submit_answer` in `backend/main.py`, logging critique history directly into `room.reflection_log` for demo transparency.
+- Tested and verified with `tests/test_reflection_agent.py`.
