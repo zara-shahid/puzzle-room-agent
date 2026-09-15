@@ -44,3 +44,12 @@
   - `HiddenCluePuzzle`
 - Built single-agent structured puzzle chain generator in `backend/generator.py`.
 - Automated schema validation and quality verification using `tests/test_generator.py` on the sample study topic *"Quantum Computing"*.
+
+---
+
+## Day 4: RAG over Study Material (Sep 19, 2026)
+
+### Key Learnings & Notes (Day 4):
+- Created study material vector RAG pipeline in `backend/rag.py` using character text chunking and vector embedding search.
+- Added hybrid keyword-density boosting to vector similarity scores to ensure precision retrieval on domain-specific study terms (e.g. *glycolysis*, *photosynthesis*, *chloroplasts*).
+- Validated text chunking and query accuracy with automated test suite `tests/test_rag.py`.
