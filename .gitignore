@@ -1,0 +1,15 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Node / React
+node_modules/
+dist/
+.vite/
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
