@@ -16,3 +16,18 @@
 - Scaffolded FastAPI backend with Uvicorn and WebSocket endpoint `/ws/{client_id}`.
 - Scaffolded React + TypeScript + Vite frontend with Tailwind CSS styling.
 - Created live WebSocket connection spike to confirm real-time bi-directional message echo/broadcast functionality.
+
+---
+
+## Day 2: Multiplayer Room State (Stretch Skill) (Sep 17, 2026)
+
+### Stretch Skill Focus:
+- Real-time in-memory multiplayer room management and event broadcasting over WebSockets.
+
+### What broke and how it was fixed:
+1. **Broken:** Generic client connection manager didn't separate connection connections by room ID, causing messages from client A in room X to broadcast to client B in room Y.
+   - **Fix:** Refactored `ConnectionManager` into `RoomManager` with a `dict[str, Dict[str, WebSocket]]` mapping `room_code -> {user_id: websocket}`.
+2. **Broken:** Race condition where client disconnected unexpectedly without sending a formal leave message, leaving orphan user presence in room state.
+   - **Fix:** Wrapped WebSocket loop in `try...except WebSocketDisconnect` block that automatically triggers `leave_room` cleanup and broadcasts the updated room state to remaining participants.
+3. **Broken:** Client lost session state on browser refresh.
+   - **Fix:** Persisted `userId`, `username`, and `roomCode` in browser `sessionStorage` so refreshing re-establishes the WebSocket session cleanly.
