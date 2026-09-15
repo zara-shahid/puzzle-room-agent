@@ -62,3 +62,12 @@
 - Wired RAG retrieval into `backend/grounded_generator.py` so generated puzzles derive directly from retrieved study material text chunks rather than generic knowledge.
 - Implemented an automated reflection guardrail (`validate_puzzle_answerability`) that verifies whether generated solutions and clues exist within source study text.
 - Re-used reflection-loop pattern to reject unanswerable puzzles prior to serving them to players in a room session.
+
+---
+
+## Day 6: Live Puzzle State Across Clients (Sep 21, 2026)
+
+### Key Learnings & Notes (Day 6):
+- Added `POST /api/rooms/submit-answer` endpoint in `backend/main.py` to evaluate puzzle solutions and update room puzzle chain progress.
+- Implemented WebSocket `PUZZLE_SOLVED` and `FAILED_ATTEMPT` broadcasts across all clients connected to a room.
+- Built **Optimistic UI Updates** in `frontend/src/App.tsx`: when a player clicks "Unlock Passcode", the puzzle instantly updates to solved state on the client before server response, and automatically reconciles/reverts if rejected.
