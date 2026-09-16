@@ -107,5 +107,15 @@
 - Added `GET /api/rooms/{room_code}/summary` endpoint to retrieve post-game learning reports.
 - Automated testing added via `tests/test_summary.py`.
 
-### Why this makes the project useful after the fun ends:
-> While escape room mechanics provide high engagement during gameplay, **The Puzzle Room Agent** converts gameplay telemetry into a diagnostic post-session learning summary. Students and study groups leave with an explicit breakdown of which concepts tripped them up and targeted review recommendations before exams.
+---
+
+## Day 10: Frontend Polish & Camera-Noticeable Demo Features (Sep 25, 2026)
+
+### Key Learnings & Notes (Day 10):
+- Overhauled puzzle room UI in `frontend/src/App.tsx` using modern Tailwind CSS styling:
+  - **Room Lobby:** Gradient text headers, glassmorphic card boundaries, RAG study material input.
+  - **Live Puzzle View:** Active puzzle stepper, dynamic problem statements, deduction clues, and instant solution unlock forms.
+  - **Teammate Presence Indicators:** Real-time online dots, host badges, and connected user lists.
+- Built **Camera-Noticeable Visual Demo Banners**:
+  - **Adaptive Difficulty Alert:** A top gradient banner (`🤖 Adaptive AI Reflection Triggered`) that pulses on screen when the AI agent evaluates group metrics and adjusts difficulty.
+  - **Adaptive Hint Nudge Alert:** A top gold banner (`💡 Group Stuck Signal Detected`) that pops up when players enter repeated wrong answers or stall.
