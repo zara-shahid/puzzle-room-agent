@@ -119,3 +119,20 @@
 - Built **Camera-Noticeable Visual Demo Banners**:
   - **Adaptive Difficulty Alert:** A top gradient banner (`🤖 Adaptive AI Reflection Triggered`) that pulses on screen when the AI agent evaluates group metrics and adjusts difficulty.
   - **Adaptive Hint Nudge Alert:** A top gold banner (`💡 Group Stuck Signal Detected`) that pops up when players enter repeated wrong answers or stall.
+
+---
+
+## Day 11: Tests and Validation (Sep 26, 2026)
+
+### Key Learnings & Notes (Day 11):
+- Created a comprehensive `pytest` test suite in `tests/test_suite.py` covering:
+  - Unbounded and grounded puzzle generation.
+  - Automated answerability guardrail pass/rejection checks.
+  - Reflection loop difficulty adjustment logic (downgrade, upgrade, flow state maintenance).
+  - Stuck signal triggers (attempt threshold and time stall).
+- **Surfaced Bugs & Fixes Logged:**
+  1. **Bug 1 (Windows Standard Out Encoding):** Unicode emojis in test strings crashed `charmap` codec output on Windows terminals (`cp1252`).
+     - **Fix:** Swapped non-standard stdout emoji characters in test logs with standard ASCII tags (e.g. `[HINT NUDGE]`, `[SUCCESS]`).
+  2. **Bug 2 (TypeScript Interface Schema Mismatch):** Type mismatch in `ReflectionCritique` interface (`reasoning: str` instead of `reasoning: string`).
+     - **Fix:** Corrected type definition in `frontend/src/App.tsx`.
+- Ran full test suite across all 14 test modules in `tests/` with 100% pass rate (`14 passed in 0.34s`).

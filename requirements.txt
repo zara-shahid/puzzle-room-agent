@@ -1,7 +1,1 @@
-fastapi
-uvicorn[standard]
-pydantic
-chromadb
-sentence-transformers
-langchain
-python-dotenv
+pytest
