@@ -21,6 +21,7 @@ class RiddlePuzzle(BaseModel):
     riddle_text: str = Field(description="The riddle question or description")
     hint: str = Field(description="Subtle hint that helps without giving away the solution")
     solution: str = Field(description="The exact answer to the riddle (case-insensitive check)")
+    lore_entry: Optional[str] = Field(default=None, description="2-3 sentence dark-fantasy lore fragment revealed when this puzzle is solved")
 
 class CodeLockPuzzle(BaseModel):
     puzzle_type: Literal[PuzzleType.CODE_LOCK] = PuzzleType.CODE_LOCK
@@ -31,6 +32,7 @@ class CodeLockPuzzle(BaseModel):
     clues: List[str] = Field(description="Sequence of clues leading to the passcode digits")
     hint: str = Field(description="Hint guiding the player towards solving the code")
     passcode: str = Field(description="The numeric string passcode required to open the lock (e.g. '4815')")
+    lore_entry: Optional[str] = Field(default=None, description="2-3 sentence dark-fantasy lore fragment revealed when this puzzle is solved")
 
 class LogicGridItem(BaseModel):
     category: str
@@ -44,6 +46,7 @@ class LogicGridPuzzle(BaseModel):
     clues: List[str] = Field(description="Deduction rules/clues provided to solve the grid")
     hint: str = Field(description="Hint to help untangle logical deductions")
     solution_mapping: dict = Field(description="Key-value dictionary representing the correct associations")
+    lore_entry: Optional[str] = Field(default=None, description="2-3 sentence dark-fantasy lore fragment revealed when this puzzle is solved")
 
 class HiddenCluePuzzle(BaseModel):
     puzzle_type: Literal[PuzzleType.HIDDEN_CLUE] = PuzzleType.HIDDEN_CLUE
@@ -53,6 +56,7 @@ class HiddenCluePuzzle(BaseModel):
     prompt: str = Field(description="What the player must discover or extract from the passage")
     hint: str = Field(description="Hint directing where or how to look in the passage")
     target_keyword: str = Field(description="The secret keyword or keyphrase hidden inside the passage")
+    lore_entry: Optional[str] = Field(default=None, description="2-3 sentence dark-fantasy lore fragment revealed when this puzzle is solved")
 
 PuzzleUnion = Union[RiddlePuzzle, CodeLockPuzzle, LogicGridPuzzle, HiddenCluePuzzle]
 
